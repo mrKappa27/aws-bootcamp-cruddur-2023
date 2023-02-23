@@ -37,7 +37,7 @@ docker run  --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend
 - Healthcheck docker compose v3 ⏸️
 - Best practices dockerfile + implement ⏸️
 - Install docker in local machine + test run containers ✅
-    - ![Running Docker locally](assets/week1-docker-local.png).
+    - ![Running Docker locally](assets/week1-docker-local.png)
 - Launch EC2 with docker installed and test container pushed to dockerhub ⏸️
     - Launched EC2 with Amazon Linux 2 AMI with dedicated metadata for installing docker `yum install docker`
     - Tested if docker was correctly installed with: `docker -v` 
@@ -61,3 +61,4 @@ docker run  --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend
          docker run  --rm -p 3000:3000 -e REACT_APP_BACKEND_URL='http://ec2-3-120-180-149.eu-central-1.compute.amazonaws.com:4567' -d mrkappa27/aws-bootcamp-cruddur-2023:frontend-react-js
          docker run  --rm -p 4567:4567 -d -e FRONTEND_URL='*' -e BACKEND_URL='*' mrkappa27/aws-bootcamp-cruddur-2023:backend-flask
         ```   
+    - ![Running Docker EC2](assets/week1-docker-ec2.png)
