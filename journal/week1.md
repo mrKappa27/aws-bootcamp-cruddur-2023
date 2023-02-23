@@ -1,47 +1,46 @@
 # Week 1 — App Containerization
 
 ### TL;DR
-I followed the week1 live and went through all the todolist points (TODO: WIP)
-I completed the assigned homework and doing that made me more knowledgeable about Docker and app containerization in general.
-I set up Docker in my local environment, my DockerHub account, pushed the images we built during the week1 to dockerhub too. Then I went deeper about multistage builds, healthchecks and the best practices about dockerfiles and their implementation.
-Finally I ran the solution on and AWS EC2 instance on which I've installed docker, pulled the image from DockerHub, ran the two images and tested them.
-TODO: Notifications backend+frontend, dynamodb local, postgres container  
+I followed the week1 live and went through all the todolist points (TODO: WIP) \
+I completed the assigned homework and doing that made me more knowledgeable about Docker and app containerization in general. \
+I set up Docker in my local environment, my DockerHub account, pushed the images we built during the week1 to dockerhub too. Then I went deeper about multistage builds, healthchecks and the best practices about dockerfiles and their implementation. \
+Finally I ran the solution on and AWS EC2 instance on which I've installed docker, pulled the image from DockerHub, ran the two images and tested them. \
+TODO: Notifications backend+frontend, dynamodb local, postgres container, healthchecks, finish best practices
 
-## What we did
-### Build Container
+## Build Container
 
-Backend 
+### Backend 
 ```sh
 docker build -t  backend-flask ./backend-flask
 ```
 
-Frontend 
+### Frontend 
 ```sh
 docker build -t  frontend-react-js ./frontend-react-js
 ```
 
-### Run Container
+## Run Container
 
-Backend 
+### Backend 
 ```sh
 docker run --rm -p 4567:4567 -it backend-flask
 ```
 Note: `-it` stands for interactive terminal
 
-Frontend 
+### Frontend 
 ```sh
 docker run --rm -p 3000:3000 -d frontend-react-js
 ```
 Note: `-d` stands for detached mode
 
-Env override
+### Env override
 ```sh
 docker run  --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flask
 ```
 
 ## Required Homeworks/Tasks
 
-- Run the dockerfile CMD as external script ✅6
+- Run the dockerfile CMD as external script ✅
     - Remember: shebang and export PATH
 - Push and tag the image to DockerHub ✅
     - Followed [official documentation](https://docs.docker.com/docker-hub/repos/#:~:text=To%20push%20an%20image%20to,docs%2Fbase%3Atesting%20).)
