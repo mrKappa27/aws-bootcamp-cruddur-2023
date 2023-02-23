@@ -37,6 +37,89 @@ Note: `-d` stands for detached mode
 ```sh
 docker run  --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flask
 ```
+## Add DynamoDB Local and Postgres
+
+Add DynamoDB and Postgres to the `docker-compose`:
+
+### Postgres
+
+```yaml
+services:
+  db:
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
+```
+
+To install the postgres client I choosed to go with pgAdmin4 because I'm on a local environment and I think it can be interesting to test what I'm learning:
+```yaml
+services:
+    pgadmin:
+        container_name: pgadmin_container
+        image: dpage/pgadmin4
+        environment:
+           - PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+           - PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+           - PGADMIN_CONFIG_SERVER_MODE: 'False'
+        volumes:
+           - pgadmin:/var/lib/pgadmin
+        ports:
+           - "${PGADMIN_PORT:-5050}:80"
+        networks:
+           - postgres
+        restart: unless-stopped
+```
+![Running pgAdmin4 local container](assets/week1-pgadmin4-local-container.png)
+
+### DynamoDB Local
+
+```yaml
+services:
+  dynamodb-local:
+    # https://stackoverflow.com/questions/67533058/persist-local-dynamodb-data-in-volumes-lack-permission-unable-to-open-databa
+    # We needed to add user:root to get this working.
+    user: root
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+```
+
+Example of using DynamoDB local
+https://github.com/100DaysOfCloud/challenge-dynamodb-local
+
+## Volumes
+
+directory volume mapping
+
+```yaml
+volumes: 
+- "./docker/dynamodb:/home/dynamodblocal/data"
+```
+
+named volume mapping
+
+```yaml
+volumes: 
+  - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+    driver: local
+```
 
 ## Required Homeworks/Tasks
 
