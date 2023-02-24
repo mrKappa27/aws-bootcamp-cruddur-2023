@@ -130,14 +130,19 @@ volumes:
     - Created a new [public repository](https://hub.docker.com/repository/docker/mrkappa27/aws-bootcamp-cruddur-2023/general) on DockerHub
     - Tagged both images (retagged the already existing image)
     - Pushed the images to DockerHub
-- Multistage build ⏸️
+- Multistage build ✅
+    - Remember:
+        - [Official docs](https://docs.docker.com/build/building/multi-stage/)
+        - useful for reducing image size and not shipping development/build dependecies in a production image (more secure)
+        - possible to use different `FROM` images
 - Healthcheck Docker compose v3 ✅
     - Remember: 
         - check or install `wget` or `curl` on the container image
         - check that your docker-compose file format is >= v3.0
         - adjust timeouts, retry, intervals and __start_period__ ( >= v3.4)
         - `docker ps` easily shows you the healtcheck status in between (parentheses)
-- Best practices dockerfile + implement ⏸️
+    - Note: Go deeper about python multi stage builds best practices (tip: VENVs)
+- Best practices dockerfile and implementation ⏸️
 - Install Docker in local machine + test run containers ✅
     - ![Running Docker locally](assets/week1-docker-local.png)
 - Launch EC2 with Docker installed and test container pushed to dockerhub ✅
