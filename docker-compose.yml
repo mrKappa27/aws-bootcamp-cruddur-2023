@@ -7,6 +7,12 @@ services:
     build: ./backend-flask
     ports:
       - "4567:4567"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:4567/api/activities/home"]
+      interval: 1s
+      retries: 5
+      start_period: 3s
+      timeout: 10s
     volumes:
       - ./backend-flask:/backend-flask
   frontend-react-js:
@@ -15,6 +21,12 @@ services:
     build: ./frontend-react-js
     ports:
       - "3000:3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000"]
+      interval: 3s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
     volumes:
       - ./frontend-react-js:/frontend-react-js
   db:

@@ -1,4 +1,6 @@
-FROM node:16.18
+FROM node:16.18 as builder
+
+RUN apt-get update && apt-get install -y curl
 
 ENV PORT=3000
 
