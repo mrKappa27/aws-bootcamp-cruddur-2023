@@ -131,14 +131,19 @@ volumes:
     - Tagged both images (retagged the already existing image)
     - Pushed the images to DockerHub
 - Multistage build ⏸️
-- Healthcheck Docker compose v3 ⏸️
+- Healthcheck Docker compose v3 ✅
+    - Remember: 
+        - check or install `wget` or `curl` on the container image
+        - check that your docker-compose file format is >= v3.0
+        - adjust timeouts, retry, intervals and __start_period__ ( >= v3.4)
+        - `docker ps` easily shows you the healtcheck status in between (parentheses)
 - Best practices dockerfile + implement ⏸️
 - Install Docker in local machine + test run containers ✅
     - ![Running Docker locally](assets/week1-docker-local.png)
 - Launch EC2 with Docker installed and test container pushed to dockerhub ✅
     - Launched EC2 with Amazon Linux 2 AMI with dedicated metadata for installing docker `yum install docker`
     - Tested if Docker was correctly installed with: `docker -v` 
-    - Added my user to the Docker group with55:
+    - Added my user to the Docker group with:
         ```
         sudo usermod -a -G docker ec2-user`
         id ec2-user
