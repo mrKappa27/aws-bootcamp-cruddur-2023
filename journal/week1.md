@@ -33,7 +33,7 @@ docker run --rm -p 3000:3000 -d frontend-react-js
 ```
 Note: `-d` stands for detached mode
 
-### Env override
+### ENV override
 ```sh
 docker run  --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flask
 ```
@@ -142,7 +142,21 @@ volumes:
         - adjust timeouts, retry, intervals and __start_period__ ( >= v3.4)
         - `docker ps` easily shows you the healtcheck status in between (parentheses)
     - Note: Go deeper about python multi stage builds best practices (tip: VENVs)
-- Best practices dockerfile and implementation ⏸️
+- Best practices dockerfile and implementation ✅
+    - Remember:
+        - [Official docs](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+        - [Rootless](https://docs.docker.com/engine/security/rootless/)
+        - Leverage cache and layers, combine when possibile but don't combine too much for avoiding to invalidate a layer if something changes (eg. package.json)
+        - Leverage multistage builds for reducing attack surface shipping only minimal required binaries or files
+        - Use trusted base images or distroless/from scratch (I will skip this for avoiding issues during the next course steps. TODO: test this on a separate branch)
+        - Expose minimal required ports
+        - Don't put secrets or credentials in an image, leverage `ENV_VARS`, bind mounts or dedicated secret managers
+        - Create a proper `.ignore` file
+        - Consider layer while writing the `Dockerfile`, place the commands that are less likely to change, and easier to cache, first.
+        - Include healthchecks
+        - Setup image scanning (eg. Synk ✅)
+        - Update your images frequently based on the base image and dependencies updates  
+        - Use a linter for detecting bad practices (eg. Hadolint ✅)
 - Install Docker in local machine + test run containers ✅
     - ![Running Docker locally](assets/week1-docker-local.png)
 - Launch EC2 with Docker installed and test container pushed to dockerhub ✅
