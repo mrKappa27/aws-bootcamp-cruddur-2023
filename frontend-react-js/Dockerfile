@@ -7,6 +7,7 @@ RUN npm install
 FROM node:16.18 as final
 ENV PORT=3000
 ENV NODE_ENV=production
+ENV DISABLE_ESLINT_PLUGIN=true
 RUN apt-get update && apt-get install --no-install-recommends -y curl=7.64.0-4+deb10u5 \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
