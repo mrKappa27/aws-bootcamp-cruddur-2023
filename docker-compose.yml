@@ -1,0 +1,82 @@
+version: "3.8"
+services:
+  backend-flask:
+    environment:
+      FRONTEND_URL: "http://127.0.0.1:3000"
+      BACKEND_URL: "http://127.0.0.1:4567"
+    build: ./backend-flask
+    ports:
+      - "4567:4567"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:4567/api/activities/home"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+    volumes:
+      - ./backend-flask:/backend-flask
+  frontend-react-js:
+    environment:
+      REACT_APP_BACKEND_URL: "http://127.0.0.1:4567"
+    build: ./frontend-react-js
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+    volumes:
+      - ./frontend-react-js:/frontend-react-js
+  db:
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+  dynamodb-local:
+    # https://stackoverflow.com/questions/67533058/persist-local-dynamodb-data-in-volumes-lack-permission-unable-to-open-databa
+    # We needed to add user:root to get this working.
+    user: root
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+  
+  pgadmin:
+      container_name: pgadmin_container
+      image: dpage/pgadmin4
+      environment:
+          - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+          - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:-admin}
+          - PGADMIN_CONFIG_SERVER_MODE=False
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=password
+      volumes:
+          - pgadmin:/var/lib/pgadmin
+      ports:
+          - "${PGADMIN_PORT:-5050}:80"
+      restart: unless-stopped  
+
+volumes:
+  db:
+    driver: local
+  pgadmin:
+    driver: local
+
+# TODO: Look what's the meaning of the next Andrew's comments
+# the name flag is a hack to change the default prepend folder
+# name when outputting the image names 
+networks: 
+  internal-network:
+    driver: bridge
+    name: cruddur
