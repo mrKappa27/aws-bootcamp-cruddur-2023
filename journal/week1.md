@@ -1,11 +1,10 @@
 # Week 1 — App Containerization
 
 ### TL;DR
-I followed the week1 live and went through all the todolist points (TODO: WIP) \
+I followed the week1 live and went through all the todolist points \
 I completed the assigned homework and doing that made me more knowledgeable about Docker and app containerization in general. \
 I set up Docker in my local environment, my DockerHub account, pushed the images we built during the week1 to dockerhub too. Then I went deeper about multistage builds, healthchecks and the best practices about dockerfiles and their implementation. \
 Finally I ran the solution on and AWS EC2 instance on which I've installed docker, pulled the image from DockerHub, ran the two images and tested them. \
-TODO: Notifications backend+frontend
 
 ## Create and build Container
 Hint: VSCode Docker Extension is very helpful for working with Docker
