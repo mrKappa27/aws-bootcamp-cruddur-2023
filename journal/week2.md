@@ -6,7 +6,9 @@ I followed the week2 live and went through all the todolist points \
 I completed the assigned homework and doing that made me more knowledgeable about distributed tracing. I didn't know much about this topic and it has been a very interesting week. \
 I registered a free tier account on Honeycomb and sent the traces to that service + did all the tasks you did on the live.
 I configured AWS X-Ray for receiving the traces from the application + did extra steps as shown in the follow up video.
-TODO: Rollbar, CWLogs
+I added AWS Cloudwatch module to the backend codebase for sending logs to a `Log Group` in AWS Cloudwatch.
+I created a Rollbar account
+TODO: Rollbar
 
 ## HoneyComb
 Follow the Honeycomb instructions for creating a new dataset in Python.
