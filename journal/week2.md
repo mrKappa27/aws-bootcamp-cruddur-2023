@@ -216,9 +216,67 @@ EPOCH=$(date +%s)
 aws xray get-service-graph --start-time $(($EPOCH-600)) --end-time $EPOCH
 ```
 
-## Rollbar
-
 ## Cloud Watch Logs
+
+Add to the `requirements.txt`
+```
+watchtower
+```
+
+Install python dependencies:
+```sh
+pip install -r requirements.txt
+```
+
+In `app.py`
+
+```
+import watchtower
+import logging
+from time import strftime
+```
+
+```py
+# Configuring Logger to Use CloudWatch
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler()
+cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur-backend-flask')
+LOGGER.addHandler(console_handler)
+LOGGER.addHandler(cw_handler)
+LOGGER.info("some message")
+```
+
+Add this block for catching all the requests:
+```py
+@app.after_request
+def after_request(response):
+    timestamp = strftime('[%Y-%b-%d %H:%M]')
+    LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+    return response
+```
+
+We'll log something in an API endpoint
+```py
+LOGGER.info('home_activities - BEGIN')
+```
+
+Set the env var in your backend-flask for `docker-compose.yml`
+
+```yml
+      AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+```
+
+__NOTE__: passing AWS_REGION doesn't seems to get picked up by boto3 so pass default region instead
+
+__TIP__: set Log group retention to a short value (eg. 1 week) so you can avoid spending for keeping old logs
+
+### Proofs:
+![Week 2 Proof Cloudwatch Logs](assets/week2-cwlogs-proof.png)
+
+## Rollbar
 
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ⏰
