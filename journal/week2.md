@@ -81,6 +81,9 @@ __NOTE__: I'm working in a local environment so I had to export them. I stored t
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ⏰
 - Instrument Honeycomb for the frontend-application to observe network latency between frontend and backend[HARD] ⏰
+    - Hypothesis solution A: use and leverage the [trace context header](https://www.w3.org/TR/trace-context/). Basically I need to find a way for adding this header in every request that the frontend sends to the backend. Doing that we can follow a trace from the frontend to the backend, between that I expect to see the network latency too. (Sounds more clean and complete)
+    - Hypothesis solution B: atach to each request a header with the UTC timestamp of the request. With that information it will be easy to calculate the difference between the moment of the request reception and the starting request timestamp. (Basic implementation)
+    - How we can be sure about what the client is reporting? Both timestamps and data.
 - Add custom instrumentation to Honeycomb to add more attributes eg. UserId, Add a custom span ✅
     - app.user_id: at the moment is just a random number but I think in the next week we can put here a proper UserId. This will be useful in case of troubleshooting an issue with a specific user.
     - app.result_lenght_byte: this is calculated from our mock data result. In a real-world scenario it can be useful to monitor how many data I'm returning. Checking this value may lead to implement pagination on this endpoint or to catch heavy responses. This attribute united with the UserId can help us to spot who's getting so much result data in a response.
