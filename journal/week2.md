@@ -1,9 +1,12 @@
 # Week 2 — Distributed Tracing
 
 ### TL;DR
+I do apologize for having used branches, from the next week I'll stick to committing to the `main` branch.
 I followed the week2 live and went through all the todolist points \
 I completed the assigned homework and doing that made me more knowledgeable about distributed tracing. I didn't know much about this topic and it has been a very interesting week. \
-TODO: Honeycomb registration + implement + other services.
+I registered a free tier account on Honeycomb and sent the traces to that service + did all the tasks you did on the live.
+I configured AWS X-Ray for receiving the traces from the application + did extra steps as shown in the follow up video.
+TODO: Rollbar, CWLogs
 
 ## HoneyComb
 Follow the Honeycomb instructions for creating a new dataset in Python.
@@ -78,8 +81,150 @@ __NOTE__: I'm working in a local environment so I had to export them. I stored t
 ### Vocabulary
 [Observability 101 terminology and concepts](https://www.honeycomb.io/blog/observability-101-terminology-and-concepts)
 
+## AWS X-Ray
+AWS equivalent to Honeycomb
+
+### Instrument AWS X-Ray for Flask
+
+```sh
+export AWS_REGION="eu-west-1"
+gp env AWS_REGION="eu-west-1"
+```
+
+Add to the `requirements.txt`:
+```py
+aws-xray-sdk
+```
+
+Install python dependencies:
+```sh
+pip install -r requirements.txt
+```
+
+Add to `app.py`
+```py
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
+
+xray_url = os.getenv("AWS_XRAY_URL")
+xray_recorder.configure(service='Cruddur', dynamic_naming=xray_url)
+XRayMiddleware(app, xray_recorder)
+```
+
+### Setup AWS X-Ray Resources
+
+Add `aws/json/xray.json`
+
+```json
+{
+  "SamplingRule": {
+      "RuleName": "Cruddur",
+      "ResourceARN": "*",
+      "Priority": 9000,
+      "FixedRate": 0.1,
+      "ReservoirSize": 5,
+      "ServiceName": "Cruddur",
+      "ServiceType": "*",
+      "Host": "*",
+      "HTTPMethod": "*",
+      "URLPath": "*",
+      "Version": 1
+  }
+}
+```
+
+```sh
+FLASK_ADDRESS="https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+aws xray create-group \
+   --group-name "Cruddur" \
+   --filter-expression "service(\"backend-flask\")"
+```
+NOTE: For seeing what we created in the console go to Cloudwatch Logs - Settings - X-Ray Traces - Groups settings
+
+```sh
+aws xray create-sampling-rule --cli-input-json file://aws/json/xray.json
+```
+NOTE: For seeing what we created in the console go to Cloudwatch Logs - Settings - X-Ray Traces - Sampling rules
+
+Sample output:
+```sh
+{
+    "SamplingRuleRecord": {
+        "SamplingRule": {
+            "RuleName": "Cruddur",
+            "RuleARN": "arn:aws:xray:eu-west-1:123456781538:sampling-rule/Cruddur",
+            "ResourceARN": "*",
+            "Priority": 9000,
+            "FixedRate": 0.1,
+            "ReservoirSize": 5,
+            "ServiceName": "backend-flask",
+            "ServiceType": "*",
+            "Host": "*",
+            "HTTPMethod": "*",
+            "URLPath": "*",
+            "Version": 1,
+            "Attributes": {}
+        },
+        "CreatedAt": "2023-03-03T21:48:21+01:00",
+        "ModifiedAt": "2023-03-03T21:48:21+01:00"
+    }
+}
+```
+
+How to install the daemon:
+[Install X-ray Daemon](https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon.html)
+
+[Github aws-xray-daemon](https://github.com/aws/aws-xray-daemon)
+[X-Ray Docker Compose example](https://github.com/marjamis/xray/blob/master/docker-compose.yml)
+
+Command for installing the daemon on an EC2 or equivalent solution
+```sh
+ wget https://s3.us-east-2.amazonaws.com/aws-xray-assets.us-east-2/xray-daemon/aws-xray-daemon-3.x.deb
+ sudo dpkg -i **.deb
+ ```
+
+### Proofs:
+![Week 2 Proof X-Ray](assets/week2-xray-proof.png)
+![Week 2 Homework Proof Seg and Subsegments](assets/week2-xray-proof-segments.png)
+
+### Add Deamon Service to Docker Compose
+
+```yml
+  xray-daemon:
+    image: "amazon/aws-xray-daemon"
+    environment:
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "us-east-1"
+    command:
+      - "xray -o -b xray-daemon:2000"
+    ports:
+      - 2000:2000/udp
+```
+
+We have to add two env vars to our backend-flask in our `docker-compose.yml` file
+
+```yml
+      AWS_XRAY_URL: "*localhost*"
+      AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
+```
+
+### Check service data for last 10 minutes
+
+```sh
+EPOCH=$(date +%s)
+aws xray get-service-graph --start-time $(($EPOCH-600)) --end-time $EPOCH
+```
+
+## Rollbar
+
+## Cloud Watch Logs
+
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ⏰
+- Add AWS X-Ray segments and sub-segments ✅
+    - Remember to add capture annotation + close segments and subsegments
+    ![Week 2 Homework Proof Seg and Subsegments](assets/week2-xray-proof-segments.png)
 - Instrument Honeycomb for the frontend-application to observe network latency between frontend and backend[HARD] ⏰
     - Hypothesis solution A: use and leverage the [trace context header](https://www.w3.org/TR/trace-context/). Basically I need to find a way for adding this header in every request that the frontend sends to the backend. Doing that we can follow a trace from the frontend to the backend, between that I expect to see the network latency too. (Sounds more clean and complete)
     - Hypothesis solution B: atach to each request a header with the UTC timestamp of the request. With that information it will be easy to calculate the difference between the moment of the request reception and the starting request timestamp. (Basic implementation)
