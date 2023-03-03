@@ -1,7 +1,18 @@
+import os
 from flask import Flask
 from flask import request
 from flask_cors import CORS, cross_origin
-import os
+
+from services.home_activities import *
+from services.notifications_activities import *
+from services.user_activities import *
+from services.create_activity import *
+from services.create_reply import *
+from services.search_activities import *
+from services.message_groups import *
+from services.messages import *
+from services.create_message import *
+from services.show_activity import *
 
 # HoneyComb
 from opentelemetry import trace
@@ -15,16 +26,10 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from aws_xray_sdk.core import xray_recorder
 from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 
-from services.home_activities import *
-from services.notifications_activities import *
-from services.user_activities import *
-from services.create_activity import *
-from services.create_reply import *
-from services.search_activities import *
-from services.message_groups import *
-from services.messages import *
-from services.create_message import *
-from services.show_activity import *
+# AWS CloudWatch Logs
+import watchtower
+import logging
+from time import strftime
 
 # HoneyComb
 # Initialize tracing and an exporter that can send data to Honeycomb
@@ -45,6 +50,15 @@ xray_url = os.getenv("AWS_XRAY_URL")
 xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
 XRayMiddleware(app, xray_recorder)
 
+# Configuring Logger to Use AWS CloudWatch
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler()
+cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur-backend-flask')
+LOGGER.addHandler(console_handler)
+LOGGER.addHandler(cw_handler)
+LOGGER.info("Application start")
+
 frontend = os.getenv('FRONTEND_URL')
 backend = os.getenv('BACKEND_URL')
 origins = [frontend, backend]
@@ -55,6 +69,13 @@ cors = CORS(
   allow_headers="content-type,if-modified-since",
   methods="OPTIONS,GET,HEAD,POST"
 )
+
+# AWS CloudWatch Logs
+@app.after_request
+def after_request(response):
+    timestamp = strftime('[%Y-%b-%d %H:%M]')
+    LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+    return response
 
 @app.route("/api/message_groups", methods=['GET'])
 def data_message_groups():
@@ -94,7 +115,7 @@ def data_create_message():
 @app.route("/api/activities/home", methods=['GET'])
 @xray_recorder.capture('activities-home')
 def data_home():
-  data = HomeActivities.run()
+  data = HomeActivities.run(logger=LOGGER)
   return data, 200
 
 @app.route("/api/activities/notifications", methods=['GET'])
