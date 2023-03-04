@@ -7,8 +7,8 @@ I completed the assigned homework and doing that made me more knowledgeable abou
 I registered a free tier account on Honeycomb and sent the traces to that service + did all the tasks you did on the live.
 I configured AWS X-Ray for receiving the traces from the application + did extra steps as shown in the follow up video.
 I added AWS Cloudwatch module to the backend codebase for sending logs to a `Log Group` in AWS Cloudwatch.
-I created a Rollbar account
-TODO: Rollbar
+I created a Rollbar account and I integrated the code for sending events and errors to the platform.
+For all of these services I've used their web interface (for AWS also the CLI) for reading and consulting my sent records. 
 
 ## HoneyComb
 Follow the Honeycomb instructions for creating a new dataset in Python.
@@ -346,19 +346,22 @@ def rollbar_test():
     return "Hello World!"
 ```
 
+We'll then edit our code for inserting an error and triggering it for sending and seeing it on Rollbar.
+
 ### Proofs:
+![Week2 Rollbar Proof](assets/week2-rollbar-proof.png)
 
 
 [Rollbar Flask Example](https://github.com/rollbar/rollbar-flask-example/blob/master/hello.py)
 
 ## Required Homeworks/Tasks
-- Completed all the todo and technical tasks ⏰
+- Completed all the todo and technical tasks ✅
 - Add AWS X-Ray segments and sub-segments ✅
     - Remember to add capture annotation + close segments and subsegments
     ![Week 2 Homework Proof Seg and Subsegments](assets/week2-xray-proof-segments.png)
 - Instrument Honeycomb for the frontend-application to observe network latency between frontend and backend[HARD] ⏰
-    - Hypothesis solution A: use and leverage the [trace context header](https://www.w3.org/TR/trace-context/). Basically I need to find a way for adding this header in every request that the frontend sends to the backend. Doing that we can follow a trace from the frontend to the backend, between that I expect to see the network latency too. (Sounds more clean and complete)
-    - Hypothesis solution B: atach to each request a header with the UTC timestamp of the request. With that information it will be easy to calculate the difference between the moment of the request reception and the starting request timestamp. (Basic implementation)
+    - Hypothesis solution A: use and leverage the [trace context header](https://www.w3.org/TR/trace-context/). Basically I need to find a way for adding this header in every request that the frontend sends to the backend. Doing that we can follow a trace from the frontend to the backend, doing that I expect to see the network latency too. (Sounds more clean and complete)
+    - Hypothesis solution B: attach to each request a header with the UTC timestamp of the request. With that information it will be easy to calculate the difference between the moment of the request reception and the starting request timestamp. (Basic implementation)
     - How we can be sure about what the client is reporting? Both timestamps and data.
 - Add custom instrumentation to Honeycomb to add more attributes eg. UserId, Add a custom span ✅
     - app.user_id: at the moment is just a random number but I think in the next week we can put here a proper UserId. This will be useful in case of troubleshooting an issue with a specific user.
