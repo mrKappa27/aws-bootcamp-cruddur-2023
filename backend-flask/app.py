@@ -1,4 +1,5 @@
 import os
+import sys
 from flask import Flask
 from flask import request
 from flask_cors import CORS, cross_origin
@@ -13,6 +14,9 @@ from services.message_groups import *
 from services.messages import *
 from services.create_message import *
 from services.show_activity import *
+
+# JWT verification
+from lib.cognito_jwt_token import CognitoJwtToken, extract_access_token, TokenVerifyError
 
 # HoneyComb
 from opentelemetry import trace
@@ -46,6 +50,9 @@ trace.set_tracer_provider(provider)
 tracer = trace.get_tracer(__name__)
 
 app = Flask(__name__)
+
+# Cognito JWT verification
+cognito_jwt_token = CognitoJwtToken(user_pool_id=os.getenv("AWS_COGNITO_USER_POOL_ID"), user_pool_client_id=os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"), region=os.getenv("AWS_DEFAULT_REGION"))
 
 # HoneyComb
 FlaskInstrumentor().instrument_app(app)
@@ -89,8 +96,8 @@ origins = [frontend, backend]
 cors = CORS(
   app, 
   resources={r"/api/*": {"origins": origins}},
-  expose_headers="location,link",
-  allow_headers="content-type,if-modified-since",
+  headers=['Content-Type', 'Authorization'], 
+  expose_headers='Authorization',
   methods="OPTIONS,GET,HEAD,POST"
 )
 
@@ -145,7 +152,22 @@ def data_create_message():
 @app.route("/api/activities/home", methods=['GET'])
 @xray_recorder.capture('activities-home')
 def data_home():
-  data = HomeActivities.run(logger=LOGGER)
+
+  access_token = extract_access_token(request.headers)
+  try:
+    claims = cognito_jwt_token.verify(access_token)
+    # In case of successful Auth
+    app.logger.debug("Authenticated")
+    # Show claims
+    app.logger.debug('claims: ')
+    app.logger.debug(claims)
+    data = HomeActivities.run(logger=LOGGER, cognito_user_id=claims['username'])
+  except TokenVerifyError as e:
+    # Not sucessful Auth
+    app.logger.debug("Unauthenticated - Error: ")
+    app.logger.debug(e)
+    data = HomeActivities.run(logger=LOGGER)
+
   return data, 200
 
 @app.route("/api/activities/notifications", methods=['GET'])

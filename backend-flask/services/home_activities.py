@@ -6,14 +6,13 @@ import sys, random
 tracer = trace.get_tracer("home.activities")
 
 class HomeActivities:
-  def run(logger):  
+  def run(logger, cognito_user_id=None):  
     logger.info('home_activities - BEGIN')
     with tracer.start_as_current_span("home.activities.mock-data"):
       span = trace.get_current_span()
       now = datetime.now(timezone.utc).astimezone()
       # Application timestamp at start span
       span.set_attribute("app.now", now.isoformat())
-      span.set_attribute("app.user_id", str(random.randint(100000000000, 999999999999)))
       results = [{
         'uuid': '68f126b0-1ceb-4a33-88be-d90fa7109eee',
         'handle':  'Andrew Brown',
@@ -53,6 +52,22 @@ class HomeActivities:
         'replies': []
       }
       ]
+
+      if cognito_user_id != None:
+        span.set_attribute("app.user_id", cognito_user_id)
+        extra_crud = {
+          'uuid': '248959df-3079-4947-b847-9e0892d1bab3',
+          'handle':  'Harry',
+          'message': 'You are logged in, Harry',
+          'created_at': (now - timedelta(hours=1)).isoformat(),
+          'expires_at': (now + timedelta(hours=12)).isoformat(),
+          'likes': 0,
+          'replies': []
+        }
+        results.insert(0, extra_crud)
+      else:
+        span.set_attribute("app.user_id", 0)
+
       span.set_attribute("app.result_lenght_byte", sys.getsizeof(results))
       span.set_attribute("app.result_lenght", len(results))
       return results
