@@ -8,7 +8,8 @@ Implement Custom Sign-Up Page \
 Implement Custom Confirmation Page \
 Implement Custom Recovery Page \
 Implement Cognito JWT Server side Verify \
-Adjusted tracing code for using real user_ids (connecting the dots) \ 
+Adjusted tracing code for using real user_ids (connecting the dots)
+
 I couldn't complete the stretched homeworks due to lack of time caused by the fact that I've a regular day to day job.
 
 ## Install AWS Amplify
@@ -405,7 +406,7 @@ cors = CORS(
 )
 ```
 
-In the `app.py` we add for checking if we can correctly grab the token from the request:
+In the `app.py` we add this code for checking if we can correctly grab the token from the request:
 ```py
   # Get out Auth Bearer Token
   app.logger.info('AUTH HEADER: ')
@@ -415,6 +416,7 @@ In the `app.py` we add for checking if we can correctly grab the token from the 
 ![Week 3 print auth token proof](assets/week3-print-auth-token-proof.png)
 
 For validating our JWT token server side we create a new folder `lib` and we add `cognito_token_verification.py` file.
+
 We'll take inspiration from [this project](https://github.com/cgauge/Flask-AWSCognito).
 
 We've then adapted the code live. For further info about the process please follow the [video](https://www.youtube.com/watch?v=d079jccoG-M&t=1s).
@@ -427,7 +429,7 @@ Note: I didn't had the audience mismatch error.
 Here the custom "extra" message returned for logged in users:
 ![Week 3 login api proof](assets/week3-custom-login-home-api-proof.png)
 
-I added the real user_id to the traces we send to Honeycomb:
+I added the real `user_id` to the traces we send to Honeycomb:
 ```py
 span.set_attribute("app.user_id", cognito_user_id)
 ```
