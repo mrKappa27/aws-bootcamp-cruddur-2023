@@ -432,3 +432,13 @@ I added the real user_id to the traces we send to Honeycomb:
 span.set_attribute("app.user_id", cognito_user_id)
 ```
 ![Week 3 Honeycomb userid proof](assets/week3-honeycomb-id-proof.png)
+
+## Required Homeworks/Tasks
+- Completed all the todo and technical tasks ✅
+- Set up Cognito User Pool ✅
+- Implement Custom Sign-In Page ✅
+- Implement Custom Sign-Up Page ✅
+- Implement Custom Confirmation Page ✅
+- Implement Custom Recovery Page ✅
+- Implement Cognito JWT Server side Verify ✅
+- Adjusted tracing code for using real user_ids ✅
