@@ -152,8 +152,11 @@ def data_create_message():
 @app.route("/api/activities/home", methods=['GET'])
 @xray_recorder.capture('activities-home')
 def data_home():
-
+  app.logger.debug('request: ')
+  app.logger.debug(request.headers)
   access_token = extract_access_token(request.headers)
+  app.logger.debug('access token: ')
+  app.logger.debug(access_token)
   try:
     claims = cognito_jwt_token.verify(access_token)
     # In case of successful Auth
@@ -198,7 +201,18 @@ def data_search():
 @app.route("/api/activities", methods=['POST','OPTIONS'])
 @cross_origin()
 def data_activities():
-  user_handle  = 'andrewbrown'
+  access_token = extract_access_token(request.headers)
+  claims = cognito_jwt_token.verify(access_token)
+  
+  test = cognito_jwt_token.loa
+  # In case of successful Auth
+  app.logger.debug("Authenticated")
+
+  # Show claims
+  app.logger.debug('claims: ')
+  app.logger.debug(claims)
+
+  user_handle  = claims['username']
   message = request.json['message']
   ttl = request.json['ttl']
   model = CreateActivity.run(message, user_handle, ttl)
