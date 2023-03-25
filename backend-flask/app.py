@@ -96,7 +96,7 @@ origins = [frontend, backend]
 cors = CORS(
   app, 
   resources={r"/api/*": {"origins": origins}},
-  headers=['Content-Type', 'Authorization'], 
+  headers=['Content-Type', 'Authorization', 'Accept'], 
   expose_headers='Authorization',
   methods="OPTIONS,GET,HEAD,POST"
 )
@@ -119,15 +119,17 @@ def data_message_groups():
   access_token = extract_access_token(request.headers)
   try:
     claims = cognito_jwt_token.verify(access_token)
+    # authenicatied request
+    app.logger.debug("authenicated")
+    app.logger.debug(claims)
     cognito_user_id = claims['sub']
     model = MessageGroups.run(cognito_user_id=cognito_user_id)
     if model['errors'] is not None:
       return model['errors'], 422
     else:
       return model['data'], 200
-
   except TokenVerifyError as e:
-    # No auth
+    # unauthenicatied request
     app.logger.debug(e)
     return {}, 401
 
