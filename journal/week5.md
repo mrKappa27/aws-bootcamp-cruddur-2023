@@ -50,6 +50,49 @@ Get conversations
 
 ![week5-list-conversations-proof.png](assets/week5-list-conversations-proof.png)
 
+Get users from Cognito via AWS CLI:
+
+```
+aws cognito-idp list-users --user-pool-id=eu-central-1_YHvgublvA --region=eu-central-1 
+```
+![week5-awscli-cognito-list-proof.png](assets/week5-awscli-cognito-list-proof.png)
+
+Get users from Cognito via AWS SDK (boto3):
+
+![week5-awssdk-cognito-list-proof.png](assets/week5-awssdk-cognito-list-proof.png)
+
+Update Cognito user ids programmatically:
+
+![week5-update_cognito_user_ids-proof.png](assets/week5-update_cognito_user_ids-proof.png)
+
+Get group messages:
+
+![week5-get-group-messages-proof.png](assets/week5-get-group-messages-proof.png)
+
+Get group messages and messages:
+
+![week5-group-messages-and-messages-proof.png](assets/week5-group-messages-and-messages-proof.png)
+
+Reversed order:
+
+![week5-group-messages-and-messages-rev.proof.png](assets/week5-group-messages-and-messages-rev-proof.png)
+
+Send a new message:
+
+![week5-group-messages-and-messages-send-proof.png](assets/week5-group-messages-and-messages-send-proof.png)
+
+Add a new user for test purposes:
+
+![week5-add-mondo-lollari-proof.png](assets/week5-add-mondo-lollari-proof.png)
+
+Check the new user simple data:
+
+![week5-check-mondo-lollari-proof.png](assets/week5-check-mondo-lollari-proof.png)
+
+Send a new message in a new group:
+
+![week5-new-msg-mondo-lollari-proof.png](assets/week5-new-msg-mondo-lollari-proof.png)
+
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks 
 - Data Modelling a Direct Messaging System using Single Table Design
