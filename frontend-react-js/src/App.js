@@ -8,6 +8,7 @@ import SigninPage from './pages/SigninPage';
 import RecoverPage from './pages/RecoverPage';
 import MessageGroupsPage from './pages/MessageGroupsPage';
 import MessageGroupPage from './pages/MessageGroupPage';
+import MessageGroupNewPage from './pages/MessageGroupNewPage';
 import ConfirmationPage from './pages/ConfirmationPage';
 import React from 'react';
 import {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
   {
     path: "/messages/:message_group_uuid",
     element: <MessageGroupPage />
+  },
+  {
+    path: "/messages/new/:handle",
+    element: <MessageGroupNewPage />
   },
   {
     path: "/signup",
