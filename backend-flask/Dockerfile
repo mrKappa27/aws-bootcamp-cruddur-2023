@@ -1,15 +1,15 @@
 # syntax=docker/dockerfile:1
-FROM python:3.10-slim-buster as builder
+FROM 420523451538.dkr.ecr.eu-central-1.amazonaws.com/cruddur-python:3.10-slim-buster as builder
 WORKDIR /backend-flask
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 COPY . .
-ENV FLASK_ENV=development
+ENV FLASK_DEBUG=1
 
-FROM python:3.10-slim-buster as final
+FROM 420523451538.dkr.ecr.eu-central-1.amazonaws.com/cruddur-python:3.10-slim-buster as final
 ENV PORT=4567
 # ENV FLASK_ENV=production Temporary removed for development comfort
-ENV FLASK_ENV=development
+ENV FLASK_DEBUG=1
 ENV OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
 ENV OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
 ENV OTEL_SERVICE_NAME: "${HONEYCOMB_SERVICE_NAME}"
