@@ -269,12 +269,15 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive
 https://docs.aws.amazon.com/AmazonECS/latest/developerguide/secrets-envvar-ssm-paramstore.html
 
 ```sh
-aws ssm put-parameter --type "SecureString" --name "/cruddur/backend-flask/AWS_ACCESS_KEY_ID" --value $AWS_ACCESS_KEY_ID
-aws ssm put-parameter --type "SecureString" --name "/cruddur/backend-flask/AWS_SECRET_ACCESS_KEY" --value $AWS_SECRET_ACCESS_KEY
-aws ssm put-parameter --type "SecureString" --name "/cruddur/backend-flask/CONNECTION_URL" --value $PROD_CONNECTION_URL
-aws ssm put-parameter --type "SecureString" --name "/cruddur/backend-flask/ROLLBAR_ACCESS_TOKEN" --value $ROLLBAR_ACCESS_TOKEN
-aws ssm put-parameter --type "SecureString" --name "/cruddur/backend-flask/OTEL_EXPORTER_OTLP_HEADERS" --value "x-honeycomb-team=$HONEYCOMB_API_KEY"
+aws ssm put-parameter --type "SecureString" --name " /cruddur/backend-flask/AWS_ACCESS_KEY_ID" --value $AWS_ACCESS_KEY_ID
+aws ssm put-parameter --type "SecureString" --name " /cruddur/backend-flask/AWS_SECRET_ACCESS_KEY" --value $AWS_SECRET_ACCESS_KEY
+aws ssm put-parameter --type "SecureString" --name " /cruddur/backend-flask/CONNECTION_URL" --value $PROD_CONNECTION_URL
+aws ssm put-parameter --type "SecureString" --name " /cruddur/backend-flask/ROLLBAR_ACCESS_TOKEN" --value $ROLLBAR_ACCESS_TOKEN
+aws ssm put-parameter --type "SecureString" --name " /cruddur/backend-flask/OTEL_EXPORTER_OTLP_HEADERS" --value "x-honeycomb-team=$HONEYCOMB_API_KEY"
 ```
+> NOTE: I added a blank space before the name for avoiding git bash to automatically prepend the system path to the first `/`
+
+![week67-parameter-store-proof.png](assets/week67-parameter-store-proof.png)
 
 ### Create Task and Exection Roles for Task Defintion
 
@@ -297,24 +300,21 @@ aws iam create-role \
 ```
 
 ```sh
-aws iam create-role \    
---role-name CruddurServiceExecutionPolicy  \   
---assume-role-policy-document file://aws/policies/service-assume-role-execution-policy.json
+aws iam create-role \
+  --role-name CruddurServiceExecutionRole \
+  --assume-role-policy-document file://aws/policies/service-assume-role-execution-policy.json
 ```
 
 ```sh
 aws iam put-role-policy \
   --policy-name CruddurServiceExecutionPolicy \
   --role-name CruddurServiceExecutionRole \
-  --policy-document file://aws/policies/service-execution-policy.json
-"
+  --policy-document "file://aws/policies/service-execution-policy.json"
 ```
 
 ```sh
 aws iam attach-role-policy --policy-arn POLICY_ARN --role-name CruddurServiceExecutionRole
 ```
-
-
 
 ```json
 
@@ -381,8 +381,12 @@ aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/CloudWatchFullAc
 aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess --role-name CruddurTaskRole
 ```
 
+![week67-iam-roles-proof.png](assets/week67-iam-roles-proof.png)
+
 ### Create Json file
 Create a new folder called `aws/task-defintions` and place the following files in there:
+
+> NOTE: Remember to replace and adapt the file with your values
 
 `backend-flask.json`
 
@@ -480,6 +484,7 @@ Create a new folder called `aws/task-defintions` and place the following files i
 aws ecs register-task-definition --cli-input-json file://aws/task-definitions/backend-flask.json
 ```
 
+![week67-ecs-be-task-def-proof.png](assets/week67-ecs-be-task-def-proof.png)
 
 ```sh
 aws ecs register-task-definition --cli-input-json file://aws/task-definitions/frontend-react-js.json
@@ -502,7 +507,7 @@ echo $CRUD_SERVICE_SG
 aws ec2 authorize-security-group-ingress \
   --group-id $CRUD_SERVICE_SG \
   --protocol tcp \
-  --port 80 \
+  --port 4567 \
   --cidr 0.0.0.0/0
 ```
 
@@ -514,6 +519,10 @@ export CRUD_SERVICE_SG=$(aws ec2 describe-security-groups \
   --query 'SecurityGroups[*].GroupId' \
   --output text)
 ```
+
+![week67-ecs-sg-proof.png](assets/week67-ecs-sg-proof.png)
+
+![week67-ecs-be-manual-proof.png](assets/week67-ecs-be-manual-proof.png)
 
 #### Update RDS SG to allow access for the last security group
 
@@ -532,6 +541,9 @@ aws ec2 authorize-security-group-ingress \
 aws ecs create-service --cli-input-json file://aws/json/service-backend-flask.json
 ```
 
+![week67-ecs-be-cli-proof.png](assets/week67-ecs-be-cli-proof.png)
+![week67-ecs-be-cli-2-proof.png](assets/week67-ecs-be-cli-2-proof.png)
+
 ```sh
 aws ecs create-service --cli-input-json file://aws/json/service-frontend-react-js.json
 ```
@@ -545,7 +557,7 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html
 
 ### Test Service
 
-Use sessions manager to connect to the EC2 instance.
+Use sessions manager to connect to the Fargate instance.
 
 #### Test RDS Connection
 
@@ -594,6 +606,8 @@ aws ec2 reboot-instances --instance-ids i-0d15aef0618733b6d
  
  ### Connection via Sessions Manaager (Fargate)
  
+ Connect to an ECS task. Useful for debugging.
+
  https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-linux
  https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-verify
  
