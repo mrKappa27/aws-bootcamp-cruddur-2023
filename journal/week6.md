@@ -234,11 +234,11 @@ echo $ECR_FRONTEND_REACT_URL
 
 ```sh
 docker build \
---build-arg REACT_APP_BACKEND_URL="https://4567-$GITPOD_WORKSPACE_ID.$GITPOD_WORKSPACE_CLUSTER_HOST" \
+--build-arg REACT_APP_BACKEND_URL="http://cruddur-alb-1946641671.eu-central-1.elb.amazonaws.com:4567" \
 --build-arg REACT_APP_AWS_PROJECT_REGION="$AWS_DEFAULT_REGION" \
 --build-arg REACT_APP_AWS_COGNITO_REGION="$AWS_DEFAULT_REGION" \
 --build-arg REACT_APP_AWS_USER_POOLS_ID="eu-central-1_YHvgublvA" \
---build-arg REACT_APP_CLIENT_ID="5b6ro31g97urk767adrbrdj1g5" \
+--build-arg REACT_APP_CLIENT_ID="6ae6329hj6dunhhv5j2i4knkhp" \
 -t frontend-react-js \
 -f Dockerfile.prod \
 .
@@ -256,6 +256,7 @@ docker tag frontend-react-js:latest $ECR_FRONTEND_REACT_URL:latest
 docker push $ECR_FRONTEND_REACT_URL:latest
 ```
 
+![week67-ecr-frontend-proof.png](assets/week67-ecr-frontend-proof.png)
 
 If you want to run and test it
 
@@ -263,9 +264,11 @@ If you want to run and test it
 docker run --rm -p 3000:3000 -it frontend-react-js 
 ```
 
+![week67-ecr-frontend-test-proof.png](assets/week67-ecr-frontend-test-proof.png)
+
 ## Register Task Defintions
 
-### Passing Senstive Data to Task Defintion
+### Passing Senstive Data to Task Definition
 
 https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html
 https://docs.aws.amazon.com/AmazonECS/latest/developerguide/secrets-envvar-ssm-paramstore.html
@@ -448,13 +451,13 @@ Create a new folder called `aws/task-defintions` and place the following files i
 ```json
 {
   "family": "frontend-react-js",
-  "executionRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/CruddurServiceExecutionRole",
-  "taskRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/CruddurTaskRole",
+  "executionRoleArn": "arn:aws:iam::420523451538:role/CruddurServiceExecutionRole",
+  "taskRoleArn": "arn:aws:iam::420523451538:role/CruddurTaskRole",
   "networkMode": "awsvpc",
   "containerDefinitions": [
     {
       "name": "frontend-react-js",
-      "image": "BACKEND_FLASK_IMAGE_URL",
+      "image": "420523451538.dkr.ecr.eu-central-1.amazonaws.com/frontend-react-js:latest",
       "cpu": 256,
       "memory": 256,
       "essential": true,
@@ -471,7 +474,7 @@ Create a new folder called `aws/task-defintions` and place the following files i
         "logDriver": "awslogs",
         "options": {
             "awslogs-group": "cruddur",
-            "awslogs-region": "ca-central-1",
+            "awslogs-region": "eu-central-1",
             "awslogs-stream-prefix": "frontend-react"
         }
       }
@@ -549,6 +552,9 @@ aws ecs create-service --cli-input-json file://aws/json/service-backend-flask.js
 ```sh
 aws ecs create-service --cli-input-json file://aws/json/service-frontend-react-js.json
 ```
+
+![week67-ecs-fe-cli-proof.png](assets/week67-ecs-be-cli-proof.png)
+![week67-ecs-fe-cli-2-proof.png](assets/week67-ecs-be-cli-2-proof.png)
 
 > Auto Assign is not supported by EC2 launch type for services
 
