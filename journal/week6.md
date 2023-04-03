@@ -103,6 +103,8 @@ aws ecs create-cluster \
 
 ![week67-ecs-create-cluster-proof.png](assets/week67-ecs-create-cluster-proof.png)
 
+![week67-fargate-service-connect-manual-proof.png](assets/week67-fargate-service-connect-manual-proof.png)
+
 Not necessary due to the fact that we'll use Fargate:
 ```sh
 export CRUD_CLUSTER_SG=$(aws ec2 create-security-group \
@@ -235,7 +237,7 @@ docker build \
 --build-arg REACT_APP_BACKEND_URL="https://4567-$GITPOD_WORKSPACE_ID.$GITPOD_WORKSPACE_CLUSTER_HOST" \
 --build-arg REACT_APP_AWS_PROJECT_REGION="$AWS_DEFAULT_REGION" \
 --build-arg REACT_APP_AWS_COGNITO_REGION="$AWS_DEFAULT_REGION" \
---build-arg REACT_APP_AWS_USER_POOLS_ID="ca-central-1_CQ4wDfnwc" \
+--build-arg REACT_APP_AWS_USER_POOLS_ID="eu-central-1_YHvgublvA" \
 --build-arg REACT_APP_CLIENT_ID="5b6ro31g97urk767adrbrdj1g5" \
 -t frontend-react-js \
 -f Dockerfile.prod \
@@ -563,7 +565,6 @@ Use sessions manager to connect to the Fargate instance.
 
 Shell into the backend flask container and run the `./bin/db/test` script to ensure we have a database connection
 
-
 #### Test Flask App is running
 
 `./bin/flask/health-check`
@@ -580,13 +581,13 @@ docker port <CONTAINER_ID>
 docker run --rm --link d71eea0b8e93:flask -it curlimages/curl --get -H "Accept: application/json" -H "Content-Type: application/json" http://flask:4567/api/activities/home
 ```
 
-#### Check endpoiint against Public IP 
+#### Check endpoint against Public IP 
 
 ```sh
 docker run --rm -it curlimages/curl --get -H "Accept: application/json" -H "Content-Type: application/json" http://3.97.113.133/api/activities/home
 ```
 
-
+![week67-fargate-api-call-db-proof.png](assets/week67-fargate-api-call-db-proof.png)
 
 ## Not able to use Sessions Manager to get into cluster EC2 sintance
 
@@ -657,6 +658,18 @@ docker run -rm \
 
  ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
+
+
+- Created application load balancer (ALB) and two target groups, one for the backend and one for the frontend:
+![week67-alb-tg-proof.png](assets/week67-alb-tg-proof.png)
+
+ECS Task healthcheck from both Target Group and internal check:
+![week67-ecs-tg-healthcheck-proof.png](assets/week67-ecs-tg-healthcheck-proof.png)
+
+Reaching our backend service from the ALB:
+![week67-alb-be-test-proof.png](assets/week67-alb-be-test-proof.png)
+
+I've skipped the part about ALB access logging for spending concerns.
 
  ## Required Homeworks/Tasks
 - Create a ECR registry for the frontend
