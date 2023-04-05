@@ -1,0 +1,25 @@
+#!/usr/bin/bash
+
+set -e
+
+# example: drop cruddur-messages prod
+
+if [ -z "$1" ]; then
+  echo "No TASK_ID argument supplied! ./connect-to-backend-flask dceb2ebdc11c49caadd64e6521c6b0c7 CONTAINER_NAME "
+  exit 1
+fi
+
+CONTAINER_NAME=backend-flask
+
+echo "Connecting to $CONTAINER_NAME - Task:$TASK_ID"
+
+aws dynamodb delete-table $ENDPOINT_URL --table-name $TABLE_NAME
+
+
+aws ecs execute-command  \
+--region $AWS_DEFAULT_REGION \
+--cluster cruddur \
+--task $TASK_ID \
+--container $CONTAINER_NAME \
+--command "/bin/bash" \
+--interactive

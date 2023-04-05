@@ -5,18 +5,13 @@ set -e
 # example: drop cruddur-messages prod
 
 if [ -z "$1" ]; then
-  echo "No TASK_ID argument supplied! ./connect-to-service dceb2ebdc11c49caadd64e6521c6b0c7 CONTAINER_NAME "
+  echo "No TASK_ID argument supplied! ./connect-to-frontend-react-js dceb2ebdc11c49caadd64e6521c6b0c7 CONTAINER_NAME "
   exit 1
 fi
 
 TASK_ID=$1
 
-if [ -z "$2" ]; then
-  echo "No CONTAINER_NAME argument supplied! ./connect-to-service dceb2ebdc11c49caadd64e6521c6b0c7 CONTAINER_NAME "
-  exit 1
-fi
-
-CONTAINER_NAME=$2
+CONTAINER_NAME=frontend-react-js
 
 echo "Connecting to $CONTAINER_NAME - Task:$TASK_ID"
 
@@ -28,5 +23,5 @@ aws ecs execute-command  \
 --cluster cruddur \
 --task $TASK_ID \
 --container $CONTAINER_NAME \
---command "/bin/bash" \
+--command "/bin/sh" \
 --interactive
