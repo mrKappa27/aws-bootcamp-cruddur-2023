@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y curl=7.64.0-4+d
  && rm -rf /var/lib/apt/lists/*
 WORKDIR /backend-flask
 COPY --from=builder ./backend-flask .
+COPY --from=builder ./backend-flask/bin ./bin
 COPY startup.sh .
 RUN pip3 install --no-cache-dir -r requirements.txt
 EXPOSE ${PORT}
