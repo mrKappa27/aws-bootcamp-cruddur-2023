@@ -661,8 +661,23 @@ docker run -rm \
 -it backend-flask-prod
  ```
 
+## Week 6-7: Guest Instructor Maish, Fargate Technical Questions
 
- ## Required Homeworks/Tasks
+- 1 container, 1 process. Easier scaling.
+- Don't focus on threads instead focus on CPU cycles you get.
+- Image and sw security is your responsability. You should do the best you can and not rely only on the shared responsability with AWS.
+- AWS examples are "easy" because they want to provide "sane defaults". If you need more complex projects you can follow AWS blog posts and GitHub examples shared on a specific repo.
+- You can use bridge when you want to expose multiple services from a single instance but you'll need a LB for mapping the requests to the correct ports.
+- ECS Service Connect is a sort of integrated App Mesh. Easier to setup, mantain and run.
+- Envoy overhead. Fargate: It's suggested to add 512MB of RAM.
+- Container insights: use it when you want to know what's happening inside your application and services. It's worth the costs, it's basically CloudWatch. You may need X-Ray.
+- Copilot: opinionated tool/way for deploying containers. You need the code and minimal configuration. Useful both for learning and production code. You can expand it with other tools like CDK.
+- When k8s? ECS can run on k8s. Mental model is important, after that you can do what you prefer. It won't make something easier or harder to mantain. 
+- VPC Lattice: alternative to Service Connect. Service Connect is limited you ECS and your account. VPC Lattice can work with other services and not only ECS, bridge to another services.
+- Can I control the Envoy config when using Service Connect? With a managed service you'll loose some level of freedom. You can request for a feature in the ECS roadmap.
+
+
+## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
 
 
@@ -677,5 +692,3 @@ Reaching our backend service from the ALB:
 
 I've skipped the part about ALB access logging for spending concerns.
 
- ## Required Homeworks/Tasks
-- Create a ECR registry for the frontend
