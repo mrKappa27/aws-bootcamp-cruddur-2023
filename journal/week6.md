@@ -234,7 +234,7 @@ echo $ECR_FRONTEND_REACT_URL
 
 ```sh
 docker build \
---build-arg REACT_APP_BACKEND_URL="http://cruddur-alb-1946641671.eu-central-1.elb.amazonaws.com:4567" \
+--build-arg REACT_APP_BACKEND_URL="https://api.kruddur.click" \
 --build-arg REACT_APP_AWS_PROJECT_REGION="$AWS_DEFAULT_REGION" \
 --build-arg REACT_APP_AWS_COGNITO_REGION="$AWS_DEFAULT_REGION" \
 --build-arg REACT_APP_AWS_USER_POOLS_ID="eu-central-1_YHvgublvA" \
@@ -689,6 +689,18 @@ ECS Task healthcheck from both Target Group and internal check:
 
 Reaching our backend service from the ALB:
 ![week67-alb-be-test-proof.png](assets/week67-alb-be-test-proof.png)
+
+Create an Hosted Zone and a valid certificate:
+![week67-acm-proof.png](assets/week67-acm-proof.png)
+
+Create new listeners on the ALB and attach the certificate:
+![week67-acm-alb-proof.png](assets/week67-acm-alb-proof.png)
+
+Create a new DNS record for the api:
+![week67-api-record-proof.png](assets/week67-api-record-proof.png)
+
+Check and test the healthcheck via the new endpoint:
+TODO:
 
 I've skipped the part about ALB access logging for spending concerns.
 
