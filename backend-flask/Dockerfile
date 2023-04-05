@@ -1,24 +1,25 @@
 # syntax=docker/dockerfile:1
 FROM 420523451538.dkr.ecr.eu-central-1.amazonaws.com/cruddur-python:3.10-slim-buster as builder
+# Inside Container
+# make a new folder inside container
 WORKDIR /backend-flask
-COPY requirements.txt requirements.txt
-RUN pip3 install --no-cache-dir -r requirements.txt
-COPY . .
-ENV FLASK_DEBUG=1
 
-FROM 420523451538.dkr.ecr.eu-central-1.amazonaws.com/cruddur-python:3.10-slim-buster as final
-ENV PORT=4567
-# ENV FLASK_ENV=production Temporary removed for development comfort
-ENV FLASK_DEBUG=1
-ENV OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
-ENV OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
-ENV OTEL_SERVICE_NAME: "${HONEYCOMB_SERVICE_NAME}"
-RUN apt-get update && apt-get install --no-install-recommends -y curl=7.64.0-4+deb10u5 \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
-WORKDIR /backend-flask
-COPY --from=builder ./backend-flask .
-RUN pip3 install --no-cache-dir -r requirements.txt
+# Outside Container -> Inside Container
+# this contains the libraries want to install to run the app
+COPY requirements.txt requirements.txt
+
+# Inside Container
+# Install the python libraries used for the app
+RUN pip3 install -r requirements.txt
+
+# Outside Container -> Inside Container
+# . means everything in the current directory
+# first period . - /backend-flask (outside container)
+# second period . /backend-flask (inside container)
+COPY . .
+
 EXPOSE ${PORT}
-USER daemon
-ENTRYPOINT [ "./startup.sh" ]
+
+# CMD (Command)
+# python3 -m flask run --host=0.0.0.0 --port=4567
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567", "--debug"]
