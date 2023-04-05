@@ -700,7 +700,10 @@ Create a new DNS record for the api:
 ![week67-api-record-proof.png](assets/week67-api-record-proof.png)
 
 Check and test the healthcheck via the new endpoint:
-TODO:
+![week67-api-lb-hc-proof.png](assets/week67-api-lb-hc-proof.png)
+
+Application deployed:
+![week67-kruddur-click-proof.png](assets/week67-kruddur-click-proof.png)
 
 I've skipped the part about ALB access logging for spending concerns.
 
