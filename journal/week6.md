@@ -663,6 +663,8 @@ docker run --rm \
 
 ## Week 6-7: Guest Instructor Maish, Fargate Technical Questions
 
+Brief sumup and notes:
+
 - 1 container, 1 process. Easier scaling.
 - Don't focus on threads instead focus on CPU cycles you get.
 - Image and sw security is your responsability. You should do the best you can and not rely only on the shared responsability with AWS.
@@ -707,6 +709,23 @@ Application deployed:
 
 Message sent on the application deployed on AWS with dedicated domain name:
 ![week67-kruddur-click-msg-proof.png](assets/week67-kruddur-click-msg-proof.png)
+
+Configure task defintions to contain X-Ray and turn on Container Insights:
+![week67-kruddur-ecs-xray-proof.png](assets/week67-kruddur-ecs-xray-proof.png)
+
+Create a Docker network running:
+
+```sh
+docker network create cruddur-net
+```
+Change Docker Compose to explicitly use a user-defined network:
+//TODO:
+
+Create Dockerfile specfically for production use case:
+//TODO:
+
+Using ruby generate out env dot files for docker using erb templates:
+//TODO:
 
 I've skipped the part about ALB access logging for spending concerns.
 
