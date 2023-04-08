@@ -705,5 +705,8 @@ Check and test the healthcheck via the new endpoint:
 Application deployed:
 ![week67-kruddur-click-proof.png](assets/week67-kruddur-click-proof.png)
 
+Message sent on the application deployed on AWS with dedicated domain name:
+![week67-kruddur-click-msg-proof.png](assets/week67-kruddur-click-msg-proof.png)
+
 I've skipped the part about ALB access logging for spending concerns.
 
