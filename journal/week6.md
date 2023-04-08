@@ -2,7 +2,10 @@
 
 ## TL;DR
 
-WIP
+- Followed the videos 
+- Followed the live 
+- Followed the call with Fargate/ECS expert
+- Completed todo checklist
 
 ## Test RDS Connection
 
@@ -683,49 +686,50 @@ Brief sumup and notes:
 - Completed all the todo and technical tasks ✅ 
 
 
-- Created application load balancer (ALB) and two target groups, one for the backend and one for the frontend:
+- Created application load balancer (ALB) and two target groups, one for the backend and one for the frontend ✅ 
 ![week67-alb-tg-proof.png](assets/week67-alb-tg-proof.png)
 
-ECS Task healthcheck from both Target Group and internal check:
+ECS Task healthcheck from both Target Group and internal check ✅ 
 ![week67-ecs-tg-healthcheck-proof.png](assets/week67-ecs-tg-healthcheck-proof.png)
 
-Reaching our backend service from the ALB:
+Reaching our backend service from the ALB ✅ 
 ![week67-alb-be-test-proof.png](assets/week67-alb-be-test-proof.png)
 
-Create an Hosted Zone and a valid certificate:
+Create an Hosted Zone and a valid certificate ✅ 
 ![week67-acm-proof.png](assets/week67-acm-proof.png)
 
-Create new listeners on the ALB and attach the certificate:
+Create new listeners on the ALB and attach the certificate ✅ 
 ![week67-acm-alb-proof.png](assets/week67-acm-alb-proof.png)
 
-Create a new DNS record for the api:
+Create a new DNS record for the api ✅ 
 ![week67-api-record-proof.png](assets/week67-api-record-proof.png)
 
-Check and test the healthcheck via the new endpoint:
+Check and test the healthcheck via the new endpoint ✅ 
 ![week67-api-lb-hc-proof.png](assets/week67-api-lb-hc-proof.png)
 
-Application deployed:
+Application deployed ✅ 
 ![week67-kruddur-click-proof.png](assets/week67-kruddur-click-proof.png)
 
-Message sent on the application deployed on AWS with dedicated domain name:
+Message sent on the application deployed on AWS with dedicated domain name ✅ 
 ![week67-kruddur-click-msg-proof.png](assets/week67-kruddur-click-msg-proof.png)
 
-Configure task defintions to contain X-Ray and turn on Container Insights:
+Configure task defintions to contain X-Ray and turn on Container Insights ✅ 
 ![week67-kruddur-ecs-xray-proof.png](assets/week67-kruddur-ecs-xray-proof.png)
 
-Create a Docker network running:
+Create a Docker network running ✅ 
 
 ```sh
 docker network create cruddur-net
 ```
-Change Docker Compose to explicitly use a user-defined network:
-//TODO:
+Change Docker Compose to explicitly use a user-defined network ✅ 
 
-Create Dockerfile specfically for production use case:
-//TODO:
+Create Dockerfile specfically for production use case ✅ 
 
 Using ruby generate out env dot files for docker using erb templates:
-//TODO:
+![week67-kruddur-erb-env-proof.png](assets/week67-kruddur-erb-env-proof.png)
+
+Enable ECS container insights ✅
+![week67-ecs-container-ins-proof.png](assets/week67-ecs-container-ins-proof.png)
+![week67-ecs-container-ins2-proof.png](assets/week67-ecs-container-ins2-proof.png)
 
 I've skipped the part about ALB access logging for spending concerns.
-
