@@ -17,7 +17,11 @@
           "command": [
             "CMD-SHELL",
             "netstat -aun | grep 2000 > /dev/null; if [ 0 != $? ]; then exit 1; fi;"
-          ]
+          ],
+          "interval": 30,
+          "timeout": 5,
+          "retries": 3,
+          "startPeriod": 60
         },
         "user": "1337",
         "portMappings": [
