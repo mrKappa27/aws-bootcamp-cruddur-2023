@@ -237,3 +237,9 @@ lambda.addToRolePolicy(snsPublishPolicy);
 Stack deployed:
 ![week8-aws-cdk-deploy-3-proof.png](assets/week8-aws-cdk-deploy-3-proof.png)
 ![week8-aws-cdk-deploy-4-proof.png](assets/week8-aws-cdk-deploy-4-proof.png)
+
+Avatar serverless resize:
+![week8-aws-cdk-avatar-resize-proof.png](assets/week8-aws-cdk-avatar-resize-proof.png)
+
+Avatar resize SNS notification configured:
+![week8-aws-cdk-avatar-resize-sns-notification-proof.png](assets/week8-aws-cdk-avatar-resize-sns-notification-proof.png)
