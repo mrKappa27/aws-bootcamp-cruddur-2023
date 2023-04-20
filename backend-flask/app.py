@@ -255,8 +255,7 @@ def data_search():
 def data_activities():
   access_token = extract_access_token(request.headers)
   claims = cognito_jwt_token.verify(access_token)
-  
-  test = cognito_jwt_token.loa
+
   # In case of successful Auth
   app.logger.debug("Authenticated")
 

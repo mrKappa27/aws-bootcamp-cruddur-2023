@@ -332,6 +332,7 @@ aws iam attach-role-policy --policy-arn POLICY_ARN --role-name CruddurServiceExe
             "Action": "ssm:GetParameter",
             "Resource": "arn:aws:ssm:ca-central-1:387543059434:parameter/cruddur/backend-flask/*"
         }
+```
 
 ```sh
 aws iam attach-role-policy \
