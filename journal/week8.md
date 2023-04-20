@@ -1,5 +1,13 @@
 # Week 8 — Serverless Image Processing
 
+## TL;DR
+
+- Followed the videos 
+- Followed the live
+- Completed the todolist
+
+Interesting week, especially what we did on rendering with Cloudfront and the main challenge has been tinkering with Ruby + presigned URLs, these URLs tend to be tricky sometimes.
+
 ## New Directory
 
 Lets contain our cdk pipeline in a new top level directory called:
@@ -243,3 +251,37 @@ Avatar serverless resize:
 
 Avatar resize SNS notification configured:
 ![week8-aws-cdk-avatar-resize-sns-notification-proof.png](assets/week8-aws-cdk-avatar-resize-sns-notification-proof.png)
+## Cloudfront
+
+Cloudfront is the AWS Content Delivery Network.
+We Use the CDN for caching the avatars so we can reduce requests to our origin, serve faster our content and save some money.
+
+> Create the ACM certificate in us-east-1 for having it available on Cloudfront!
+
+![week8-aws-cdk-acm-proof.png](assets/week8-aws-cdk-acm-proof.png)
+
+Add an Alias CNAME record in our hosted zone to our distribution:
+
+![week8-aws-cdk-cf-r53-assets-proof.png](assets/week8-aws-cdk-cf-r53-assets-proof.png)
+
+Update the source S3 bucket (origin) policy with the one suggested from Cloudfront:
+
+![week8-aws-cdk-cf-s3-bucket-policy-proof.png](assets/week8-aws-cdk-cf-s3-bucket-policy-proof.png)
+
+Testing the CDN:
+
+![week8-aws-cdk-cdn-ok-proof.png](assets/week8-aws-cdk-cdn-ok-proof.png)
+
+## Required Homeworks/Tasks
+- Completed all the todo and technical tasks ✅ 
+- Implement CDK Stack	✅ 
+- Serve Avatars via CloudFront	
+  - 
+  - ![]()
+- Implement Users Profile Page	
+- Implement Users Profile Form	
+- Implement Backend Migrations	
+- Presigned URL generation via Ruby Lambda
+- HTTP API Gateway with Lambda Authorizer	
+- Create JWT Lambda Layer	
+- Render Avatars in App via CloudFront
