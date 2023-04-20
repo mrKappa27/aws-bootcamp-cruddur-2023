@@ -272,12 +272,14 @@ Testing the CDN:
 
 ![week8-aws-cdk-cdn-ok-proof.png](assets/week8-aws-cdk-cdn-ok-proof.png)
 
+Then we separated the source and destination buckets for not having publicly available the source images and for better future scaling and separation of the S3 buckets:
+
+![week8-aws-cdk-cdn-edits-ok-proof.png](assets/week8-aws-cdk-cdn-edits-ok-proof.png)
+
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
 - Implement CDK Stack	✅ 
-- Serve Avatars via CloudFront	
-  - 
-  - ![]()
+- Serve Avatars via CloudFront ✅
 - Implement Users Profile Page	
 - Implement Users Profile Form	
 - Implement Backend Migrations	
