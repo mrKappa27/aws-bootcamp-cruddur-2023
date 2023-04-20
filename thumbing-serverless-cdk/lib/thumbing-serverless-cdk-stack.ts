@@ -89,7 +89,8 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
     bucket.addEventNotification(
       s3.EventType.OBJECT_CREATED_PUT,
       destination,
-      {prefix: prefix} // folder to contain the original images
+      // Disabled
+      // {prefix: prefix} // folder to contain the original images
     )
   }
 
