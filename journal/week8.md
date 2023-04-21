@@ -6,7 +6,7 @@
 - Followed the live
 - Completed the todolist
 
-Interesting week, especially what we did on rendering with Cloudfront and the main challenge has been tinkering with Ruby + presigned URLs, these URLs tend to be tricky sometimes.
+Interesting week, especially what we did on rendering with Cloudfront and the main challenge has been tinkering with Ruby + presigned URLs, these URLs tend to be tricky sometimes, and working with the frontend is quite tricky because there are a lot of things to care about. 
 
 ## New Directory
 
@@ -276,11 +276,25 @@ Then we separated the source and destination buckets for not having publicly ava
 
 ![week8-aws-cdk-cdn-edits-ok-proof.png](assets/week8-aws-cdk-cdn-edits-ok-proof.png)
 
+## Implement Users Profile Page
+
+We are going to implement a dedicated user profile page.
+For doing that we need to work on both backend, frontend and minor tooling files.
+Finally we've to adapt the database structure for keeping track of the new infos.
+
+Here an example of the real user profile API (not anymore mocked):
+![week8-aws-user-profile-api-proof.png](assets/week8-aws-user-profile-api-proof.png)
+
+Mainly we worked on how to show and manage this feature based on conditionals showing buttons/options and improving API:
+![week8-aws-user-profile-api-2-proof.png](assets/week8-aws-user-profile-api-2-proof.png)
+
+![week8-aws-user-profile-proof.png](assets/week8-aws-user-profile-proof.png)
+
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
 - Implement CDK Stack	✅ 
 - Serve Avatars via CloudFront ✅
-- Implement Users Profile Page	
+- Implement Users Profile Page	✅
 - Implement Users Profile Form	
 - Implement Backend Migrations	
 - Presigned URL generation via Ruby Lambda
