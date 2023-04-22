@@ -359,6 +359,30 @@ Configure the authorization:
 
 ![week8-aws-api-gw-signed-url-cors-proof.png](assets/week8-aws-api-gw-signed-url-cors-proof.png)
 
+Remember to add CORS S3 configuration to `kruddur-uploaded-avatars`:
+
+```
+[
+  {
+      "AllowedHeaders": [
+          "*"
+      ],
+      "AllowedMethods": [
+          "PUT"
+      ],
+      "AllowedOrigins": [
+          "*"
+      ],
+      "ExposeHeaders": [
+          "x-amz-server-side-encryption",
+          "x-amz-request-id",
+          "x-amz-id-2"
+      ],
+      "MaxAgeSeconds": 3000
+  }
+]
+```
+
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
 - Implement CDK Stack	✅ 
