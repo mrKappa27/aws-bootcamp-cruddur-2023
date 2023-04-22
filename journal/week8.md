@@ -290,6 +290,18 @@ Mainly we worked on how to show and manage this feature based on conditionals sh
 
 ![week8-aws-user-profile-proof.png](assets/week8-aws-user-profile-proof.png)
 
+## Implement Migrations Backend Endpoint and Profile Form
+
+We're going to create the Profile Form and, for doing that, we need to change our database structure.
+Using the migration approach is a common way for handling database structure changes in a programmatic way, a lot of frameworks have a built in migration management.
+Basically you define a migration as a set of changes to be applied to your database in a controlled way, for example you could also insert some logic before changing the database.
+Usually you apply migrations for evolving your database structure but, having them as code, you can also "rollback" to the previous database state, this action is usually known as "migrate down" as opposed to "migrate up".
+
+We'll use migrations for adding the `bio` column in the `user` table.
+
+Add migration table and run migration:
+![week8-aws-migration-table-proof.png](assets/week8-aws-migration-table-proof.png)
+
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
 - Implement CDK Stack	✅ 
