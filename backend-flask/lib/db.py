@@ -17,7 +17,6 @@ class Db:
     green = '\033[92m'
     no_color = '\033[0m'
     print("\n")
-
     print(f'{green} Load SQL Template: {template_path} {no_color}')
 
     with open(template_path, 'r') as f:
@@ -27,8 +26,8 @@ class Db:
   def init_pool(self):
     connection_url = os.getenv("CONNECTION_URL")
     self.pool = ConnectionPool(connection_url)
-  # For committing data such as an insert
-  # NOTE: Check for RETURNING in all uppercases
+  # we want to commit data such as an insert
+  # be sure to check for RETURNING in all uppercases
   def print_params(self,params):
     blue = '\033[94m'
     no_color = '\033[0m'
@@ -41,8 +40,9 @@ class Db:
     no_color = '\033[0m'
     print(f'{cyan} SQL STATEMENT-[{title}]------{no_color}')
     print(sql,params)
-  def query_commit(self,sql,params={}):
-    self.print_sql('commit with returning',sql,params)
+  def query_commit(self,sql,params={},verbose=True):
+    if verbose:
+      self.print_sql('commit with returning',sql,params)
 
     pattern = r"\bRETURNING\b"
     is_returning_id = re.search(pattern, sql)
@@ -58,9 +58,10 @@ class Db:
           return returning_id
     except Exception as err:
       self.print_sql_err(err)
-  # For returning a json object
-  def query_array_json(self,sql,params={}):
-    self.print_sql('array',sql,params)
+  # when we want to return a json object
+  def query_array_json(self,sql,params={},verbose=True):
+    if verbose:
+      self.print_sql('array',sql,params)
 
     wrapped_sql = self.query_wrap_array(sql)
     with self.pool.connection() as conn:
@@ -68,11 +69,12 @@ class Db:
         cur.execute(wrapped_sql,params)
         json = cur.fetchone()
         return json[0]
-  # For returning an array of json objects
-  def query_object_json(self,sql,params={}):
+  # When we want to return an array of json objects
+  def query_object_json(self,sql,params={},verbose=True):
+    if verbose:
+      self.print_sql('json',sql,params)
+      self.print_params(params)
 
-    self.print_sql('json',sql,params)
-    self.print_params(params)
     wrapped_sql = self.query_wrap_object(sql)
 
     with self.pool.connection() as conn:
@@ -83,8 +85,10 @@ class Db:
           return "{}"
         else:
           return json[0]
-  def query_value(self,sql,params={}):
-    self.print_sql('value',sql,params)
+  def query_value(self,sql,params={},verbose=True):
+    if verbose:
+      self.print_sql('value',sql,params)
+
     with self.pool.connection() as conn:
       with conn.cursor() as cur:
         cur.execute(sql,params)
@@ -105,17 +109,17 @@ class Db:
     """
     return sql
   def print_sql_err(self,err):
-    # Show details about the exception
+    # get details about the exception
     err_type, err_obj, traceback = sys.exc_info()
 
-    # Show line number when exception occured
+    # get the line number when exception occured
     line_num = traceback.tb_lineno
 
-    # Show the connect() error
-    print ("\npsycopg ERROR:", err, "at line number:", line_num)
+    # print the connect() error
+    print ("\npsycopg ERROR:", err, "on line number:", line_num)
     print ("psycopg traceback:", traceback, "-- type:", err_type)
 
-    # Show the pgcode and pgerror exception
+    # print the pgcode and pgerror exceptions
     print ("pgerror:", err.pgerror)
     print ("pgcode:", err.pgcode, "\n")
 
