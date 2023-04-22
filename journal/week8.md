@@ -6,7 +6,7 @@
 - Followed the live
 - Completed the todolist
 
-Interesting week, especially what we did on rendering with Cloudfront and the main challenge has been tinkering with Ruby + presigned URLs, these URLs tend to be tricky sometimes, and working with the frontend is quite tricky because there are a lot of things to care about. 
+Interesting week, especially what we did on rendering with Cloudfront and the main challenge has been tinkering with Ruby + presigned URLs, these URLs tend to be tricky sometimes, and working with the frontend is quite challenging because there are a lot of things to care about. 
 
 ## New Directory
 
@@ -283,9 +283,11 @@ For doing that we need to work on both backend, frontend and minor tooling files
 Finally we've to adapt the database structure for keeping track of the new infos.
 
 Here an example of the real user profile API (not anymore mocked):
+
 ![week8-aws-user-profile-api-proof.png](assets/week8-aws-user-profile-api-proof.png)
 
 Mainly we worked on how to show and manage this feature based on conditionals showing buttons/options and improving API:
+
 ![week8-aws-user-profile-api-2-proof.png](assets/week8-aws-user-profile-api-2-proof.png)
 
 ![week8-aws-user-profile-proof.png](assets/week8-aws-user-profile-proof.png)
@@ -300,15 +302,20 @@ Usually you apply migrations for evolving your database structure but, having th
 We'll use migrations for adding the `bio` column in the `user` table.
 
 Add migration table and run migration:
+
 ![week8-aws-migration-table-proof.png](assets/week8-aws-migration-table-proof.png)
+
+Profile updated:
+
+![week8-aws-update-profile-proof.png](assets/week8-aws-update-profile-proof.png)
 
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
 - Implement CDK Stack	✅ 
 - Serve Avatars via CloudFront ✅
 - Implement Users Profile Page	✅
-- Implement Users Profile Form	
-- Implement Backend Migrations	
+- Implement Users Profile Form ✅
+- Implement Backend Migrations ✅
 - Presigned URL generation via Ruby Lambda
 - HTTP API Gateway with Lambda Authorizer	
 - Create JWT Lambda Layer	
