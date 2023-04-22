@@ -309,6 +309,56 @@ Profile updated:
 
 ![week8-aws-update-profile-proof.png](assets/week8-aws-update-profile-proof.png)
 
+## Presigned URL generation via Ruby Lambda
+
+In this section we're going to implement a Ruby Lambda called `cruddur-upload-avatar` for generating a S3 Presigned URL.
+A presigned URL gives you access to the object identified in the URL, provided that the creator of the presigned URL has permissions to access that object.
+For further info see this [link](https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html)
+
+The benefit of using this solution is to offload the upload process from the server and let it be done directly from the client.
+The only thing the server has to handle is the URL generation then, the client, will use that URL for uploading the content directly to S3.
+
+Presigned URLs can also be used for downloading an object and we can also use cookies for managing the access.
+
+Test locally the Ruby code:
+
+```sh
+bundle exec ruby function.rb
+```
+
+> Use Postman for testing the URL
+
+If necesary we can set a S3 lifecycle rule for deleting objects after a certain amount of time.
+
+> Remember to add the UPLOADS_BUCKET_NAME ENV VAR!
+
+Here the tested function output:
+
+![week8-aws-ruby-s3-signed-url-proof.png](assets/week8-aws-ruby-s3-signed-url-proof.png)
+
+## HTTP API Gateway with Lambda Authorizer	
+
+For doing that we need to create an API endpoint, which triggers our Lambda that returns our presigned URL to the frontend.
+
+This requests must be validated so only our allowed users are capable of fetching the signed URL.
+For doing that validation we'll write a dedicated Lambda called `lambda-authorizer`, this Lambda will validate the Bearer Token in the request.
+
+> For uploading this Lambda to the console we've to zip it with the command `zip -r lambda_authorizer.zip .`
+
+> Add environment variables USER_POOL_ID and CLIENT_ID
+
+Create the API Gateway:
+
+![week8-aws-api-gw-signed-url-proof.png](assets/week8-aws-api-gw-signed-url-proof.png)
+
+Configure the authorization:
+
+![week8-aws-api-gw-signed-url-auth-proof.png](assets/week8-aws-api-gw-signed-url-auth-proof.png)
+
+> Configure CORS on the API Gateway to allow POST and OPTIONS methods and the ORIGIN (remember to add it, bad UI!)
+
+![week8-aws-api-gw-signed-url-cors-proof.png](assets/week8-aws-api-gw-signed-url-cors-proof.png)
+
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
 - Implement CDK Stack	✅ 
@@ -316,7 +366,7 @@ Profile updated:
 - Implement Users Profile Page	✅
 - Implement Users Profile Form ✅
 - Implement Backend Migrations ✅
-- Presigned URL generation via Ruby Lambda
-- HTTP API Gateway with Lambda Authorizer	
-- Create JWT Lambda Layer	
+- Presigned URL generation via Ruby Lambda ✅
+- HTTP API Gateway with Lambda Authorizer	✅
+- Create JWT Lambda Layer	✅
 - Render Avatars in App via CloudFront
