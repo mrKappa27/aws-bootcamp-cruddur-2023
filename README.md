@@ -25,7 +25,7 @@ The `/journal` directory contains
 - :white_check_mark: [Week 5](journal/week5.md)
 - :white_check_mark: [Week 6](journal/week6.md)
 - :white_check_mark: [Week 7](journal/week7.md)
-- [ ] [Week 8](journal/week8.md)
+- :white_check_mark: [Week 8](journal/week8.md)
 - [ ] [Week 9](journal/week9.md)
 - [ ] [Week 10](journal/week10.md)
 - [ ] [Week 11](journal/week11.md)

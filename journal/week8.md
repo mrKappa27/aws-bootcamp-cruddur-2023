@@ -408,6 +408,9 @@ Final result:
 
  ## Render Avatars in App via CloudFront
 
+ Update the frontend code for showing the avatar at the side of the username.
+
+
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
 - Implement CDK Stack	✅ 
@@ -418,4 +421,4 @@ Final result:
 - Presigned URL generation via Ruby Lambda ✅
 - HTTP API Gateway with Lambda Authorizer	✅
 - Create JWT Lambda Layer	✅
-- Render Avatars in App via CloudFront
+- Render Avatars in App via CloudFront ✅
