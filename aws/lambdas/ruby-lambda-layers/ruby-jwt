@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+export PATH=$PATH:"C:\Program Files\7-Zip"
+
+gem i jwt -Ni /c/tmp/lambda-layers/ruby-jwt/ruby/gems/2.7.0
+cd /c/tmp/lambda-layers/ruby-jwt
+
+7z -r lambda-layers . -x ".*" -x "*/.*"
+zipinfo -t lambda-layers
+
+aws lambda publish-layer-version \
+  --layer-name jwt \
+  --description "Lambda Layer for JWT" \
+  --license-info "MIT" \
+  --zip-file fileb://lambda-layers.zip \
+  --compatible-runtimes ruby2.7
