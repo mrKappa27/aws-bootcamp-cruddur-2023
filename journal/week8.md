@@ -7,6 +7,7 @@
 - Completed the todolist
 
 Interesting week, especially what we did on rendering with Cloudfront and the main challenge has been tinkering with Ruby + presigned URLs, these URLs tend to be tricky sometimes, and working with the frontend is quite challenging because there are a lot of things to care about. 
+Finally, the real challenge was to grok CORS, this week pushed me in going deeper about this topic.
 
 ## New Directory
 
@@ -355,9 +356,9 @@ Configure the authorization:
 
 ![week8-aws-api-gw-signed-url-auth-proof.png](assets/week8-aws-api-gw-signed-url-auth-proof.png)
 
-> Configure CORS on the API Gateway to allow POST and OPTIONS methods and the ORIGIN (remember to add it, bad UI!)
+> DO NOT Configure CORS on the API Gateway. Add the {proxy+} management OPTIONS. See this [video](https://www.youtube.com/watch?v=eO7bw6_nOIc)
 
-![week8-aws-api-gw-signed-url-cors-proof.png](assets/week8-aws-api-gw-signed-url-cors-proof.png)
+![week8-aws-api-gw-proxy-proof.png](assets/week8-aws-api-gw-proxy-proof.png)
 
 Remember to add CORS S3 configuration to `kruddur-uploaded-avatars`:
 
@@ -382,6 +383,30 @@ Remember to add CORS S3 configuration to `kruddur-uploaded-avatars`:
   }
 ]
 ```
+
+## Create JWT Lambda Layer
+
+Lambda layers provide a convenient way to package libraries and other dependencies that you can use with your Lambda functions. Using layers reduces the size of uploaded deployment archives and makes it faster to deploy your code. A layer is a . zip file archive that can contain additional code or data.
+
+We are going to need that because we added the `jwt` module to our Ruby Lambda.
+
+Build and upload the layer:
+
+![week8-aws-lambda-layer-proof.png](assets/week8-aws-lambda-layer-proof.png)
+
+Assign it to your Lambda:
+
+![week8-aws-lambda-layer-assign-proof.png](assets/week8-aws-lambda-layer-assign-proof.png)
+
+Upload form + reply for our API with the signed url:
+
+![week8-upload-ok-proof.png](assets/week8-upload-ok-proof.png)
+
+Final result:
+
+![week8-final-proof.png](assets/week8-final-proof.png)
+
+ ## Render Avatars in App via CloudFront
 
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
