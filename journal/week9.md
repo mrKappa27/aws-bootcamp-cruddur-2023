@@ -23,6 +23,8 @@ When you're building you can use specific `ENV_VARs` that will help you during t
 
 Here the reference [documentation](https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html).
 
+Do not set your environment to use VPC in this scenario, we need to be able to reach other services like ECR.
+
 ## Configuring CodePipeline
 
 AWS CodePipeline is a fully managed continuous delivery service that helps you automate your release pipelines for fast and reliable application and infrastructure updates.
@@ -46,6 +48,10 @@ Set our ECS beackend-flask as deploy target:
 Create a build project for backend flask for using it in our build stage in the pipeline:
 
 ![week9-create-pipeline-build-project-proof.png](assets/week9-create-pipeline-build-project-proof.png)
+
+For triggering a build in our pipeline we've to merge our code to the specific source branch called `prod`:
+
+
 
 ## Required Homeworks/Tasks
 - Completed all the todo and technical tasks ✅ 
