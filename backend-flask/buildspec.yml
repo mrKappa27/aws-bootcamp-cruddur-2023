@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      docker: 19
+      docker: 20
     commands:
       - echo "cd into $CODEBUILD_SRC_DIR"
       - cd $CODEBUILD_SRC_DIR
@@ -26,6 +26,7 @@ env:
   variables:
     AWS_ACCOUNT_ID: 420523451538
     CONTAINER_NAME: backend-flask
+    $AWS_DEFAULT_REGION: eu-central-1
     IMAGE_URL: 420523451538.dkr.ecr.eu-central-1.amazonaws.com
     REPO_NAME: backend-flask:latest
 
